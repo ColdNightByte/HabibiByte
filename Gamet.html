@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Click the Box Game</title>
+<style>
+    body {
+        background: #222;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+    h1 {
+        margin-top: 20px;
+    }
+    #gameArea {
+        width: 90%;
+        height: 70%;
+        background: #333;
+        border: 3px solid white;
+        position: relative;
+        margin-top: 20px;
+        overflow: hidden;
+    }
+    #box {
+        width: 50px;
+        height: 50px;
+        background: red;
+        position: absolute;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    #score, #time {
+        font-size: 20px;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Click the Box!</h1>
+<div id="score">Score: 0</div>
+<div id="time">Time: 160</div>
+<div id="gameArea">
+    <div id="box"></div>
+</div>
+
+<script>
+    let box = document.getElementById('box');
+    let gameArea = document.getElementById('gameArea');
+    let scoreDisplay = document.getElementById('score');
+    let timeDisplay = document.getElementById('time');
+    
+    let score = 0;
+    let timeLeft = 160;
+    let gameTimer;
+
+    function randomPosition() {
+        let areaWidth = gameArea.clientWidth - 50;
+        let areaHeight = gameArea.clientHeight - 50;
+        let x = Math.floor(Math.random() * areaWidth);
+        let y = Math.floor(Math.random() * areaHeight);
+        box.style.left = x + 'px';
+        box.style.top = y + 'px';
+    }
+
+    box.addEventListener('click', () => {
+        score++;
+        scoreDisplay.textContent = "Score: " + score;
+        randomPosition();
+    });
+
+    function startGame() {
+        score = 0;
+        scoreDisplay.textContent = "Score: " + score;
+        timeLeft = 160;
+        timeDisplay.textContent = "Time: " + timeLeft;
+
+        randomPosition();
+
+        clearInterval(gameTimer);
+        gameTimer = setInterval(() => {
+            timeLeft--;
+            timeDisplay.textContent = "Time: " + timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(gameTimer);
+                alert("Game Over! Your score: " + score);
+            }
+        }, 1000);
+
+        // Move box every 700ms
+        setInterval(randomPosition, 700);
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>
